@@ -1,9 +1,11 @@
 
 ## Technologies Used
 
-**Programming Language**: JavaScript
-**Automation Tool**: Playwright
-**Reporting Tool**: Playwright built-in
+Programming Language: JavaScript
+
+Automation Tool: Playwright
+
+Reporting Tool: Playwright built-in
 
 ## Prerequisites
 **Node.js v18+**: Ensure you have Node.js version 18 or higher installed
