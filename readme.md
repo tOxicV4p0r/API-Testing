@@ -7,6 +7,9 @@ Automation Tool: Playwright
 
 Reporting Tool: Playwright built-in
 
+### Test cases
+https://docs.google.com/spreadsheets/d/1HOljVvGWaMCAPEnb0JLag8NJ6cXI7GPAJIZcmz33QvI
+
 ## Prerequisites
 **Node.js v18+**: Ensure you have Node.js version 18 or higher installed
 
