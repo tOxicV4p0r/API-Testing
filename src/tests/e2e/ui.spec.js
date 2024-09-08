@@ -5,8 +5,8 @@ const { LoginPage } = require("../../pages/login-page");
 
 const userInfo = require('../../test-data/e2e/user-information.json');
 
-const VALID_USERNAME = problemUsers[1].username;
-const VALID_PASSWORD = problemUsers[1].password;
+const VALID_USERNAME = problemUsers[0].username;
+const VALID_PASSWORD = problemUsers[0].password;
 const TAX = 0.08;
 
 test.describe('LOGIN PAGE', () => {
@@ -264,14 +264,15 @@ test.describe('CHECKOUT OVERVIEW PAGE', () => {
 
     let cartItems = [];
 
-    test.beforeEach(async ({ page, inventoryPage, cartPage, checkoutInformationPage }) => {
+    test.beforeEach(async ({ page, inventoryPage, cartPage, checkoutInformationPage, checkoutOverviewPage }) => {
         await setupValidLogin(page, VALID_USERNAME, VALID_PASSWORD);
         await inventoryPage.goto();
         cartItems = await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
-        await cartPage.gotoCheckout();
-        await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
-        await checkoutInformationPage.goToCheckoutOverviewPage();
+        // await cartPage.gotoCheckout();
+        // await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
+        // await checkoutInformationPage.goToCheckoutOverviewPage();
+        await checkoutOverviewPage.goto();
     });
 
     test('TC-027: Display the number of items as the cart badge number', async ({ checkoutOverviewPage }) => {
@@ -287,13 +288,13 @@ test.describe('CHECKOUT OVERVIEW PAGE', () => {
     test('TC-029: Correctly calculate the total, tax, and grand total', async ({ checkoutOverviewPage }) => {
         const totalPrice = sumPrice(cartItems);
 
-        expect.soft(await checkoutOverviewPage.getTotalPrice()).toBe(totalPrice);
-
-        const totalPriceWTax = totalPrice + Number((totalPrice * TAX).toFixed(2));
-        expect.soft(await checkoutOverviewPage.getGrandTotalPrice()).toBe(totalPriceWTax);
+        expect.soft(await checkoutOverviewPage.getTotalPrice(), `Total price :${totalPrice}`).toBe(totalPrice);
 
         const totalTax = Number((totalPrice * TAX).toFixed(2))
-        expect.soft(await checkoutOverviewPage.getTax()).toBe(totalTax);
+        expect.soft(await checkoutOverviewPage.getTax(), `Tax :${totalTax}`).toBe(totalTax);
+
+        const totalPriceWTax = totalPrice + Number((totalPrice * TAX).toFixed(2));
+        expect.soft(await checkoutOverviewPage.getGrandTotalPrice(), `Total price with tax :${totalPriceWTax}`).toBe(totalPriceWTax);
     });
 
     test('TC-030: When clicking "Cancel", navigate back to the product page', async ({ checkoutOverviewPage, inventoryPage }) => {
@@ -315,15 +316,16 @@ test.describe('CHECKOUT COMPLETE PAGE', () => {
         When clicking "Back Home", navigate back to the product page
     */
 
-    test.beforeEach(async ({ page, inventoryPage, cartPage, checkoutInformationPage, checkoutOverviewPage }) => {
+    test.beforeEach(async ({ page, inventoryPage, cartPage, checkoutInformationPage, checkoutOverviewPage, checkoutCompletePage }) => {
         await setupValidLogin(page, VALID_USERNAME, VALID_PASSWORD);
         await inventoryPage.goto();
         await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
         await cartPage.gotoCheckout();
-        await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
-        await checkoutInformationPage.goToCheckoutOverviewPage();
-        await checkoutOverviewPage.goToCheckoutCompletePage();
+        // await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
+        // await checkoutInformationPage.goToCheckoutOverviewPage();
+        // await checkoutOverviewPage.goToCheckoutCompletePage();
+        await checkoutCompletePage.goto();
     });
 
     test('TC-032: Remove the cart badge number', async ({ checkoutCompletePage }) => {

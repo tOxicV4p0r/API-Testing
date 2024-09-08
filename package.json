@@ -10,10 +10,11 @@
     "test:headless": "npx playwright test",
     "test:report": "npx playwright show-report",
     "test:api": "npx playwright test --config config.api.js",
-    "test:api:update": "powershell -Command \"npm run test:api; npm run service:update:status\"",
+    "test:api:update": "powershell -Command \"npm run test:api; npm run service:update:api\"",
     "test:e2e": "npx playwright test ./src/tests/e2e/ui.spec.js --project chromium --config config.e2e.js",
-    "test:e2e:update": "npx playwright test ./src/tests/e2e/ui.spec.js --project chromium --config config.e2e.js",
-    "service:update:status": "node ./src/services/update-api-test-result"
+    "test:e2e:update": "powershell -Command \"npm run test:e2e; npm run service:update:e2e\"",
+    "service:update:api": "node ./src/services/update-api-test-result",
+    "service:update:e2e": "node ./src/services/update-e2e-test-result"
   },
   "keywords": [],
   "author": "",
