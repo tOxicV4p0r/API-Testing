@@ -224,6 +224,9 @@ export class InventoryPage {
             if (cartItemCount !== cartItemCountAdded) {
                 expect.soft(cartItemCountAdded, `Count badge should change from ${cartItemCount - 1} to ${cartItemCount}`).toBe(cartItemCount);
                 isError = true;
+
+                // reset back
+                cartItemCount = await this.getCartCount();
             }
 
             const isAdded = await this.isItemAdded(element);
@@ -242,6 +245,9 @@ export class InventoryPage {
             if (cartItemCount !== cartItemCountRemoved) {
                 expect.soft(cartItemCountRemoved, `Count badge should change from ${cartItemCount + 1} to ${cartItemCount}`).toBe(cartItemCount);
                 isError = true;
+
+                // reset back
+                cartItemCount = await this.getCartCount();
             }
 
             const isRemoved = await this.isItemRemoved(element);

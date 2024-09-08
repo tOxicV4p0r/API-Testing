@@ -5,8 +5,8 @@ const { LoginPage } = require("../../pages/login-page");
 
 const userInfo = require('../../test-data/e2e/user-information.json');
 
-const VALID_USERNAME = problemUsers[0].username;
-const VALID_PASSWORD = problemUsers[0].password
+const VALID_USERNAME = problemUsers[1].username;
+const VALID_PASSWORD = problemUsers[1].password;
 const TAX = 0.08;
 
 test.describe('LOGIN PAGE', () => {
@@ -55,7 +55,7 @@ test.describe('LOGIN PAGE', () => {
             expect(await loginPage.getErrorMessage()).toEqual("");
             expect(loginPage.isValidURL()).toBe(false);
         });
-    })
+    });
 
     lockedUsers.forEach(({ username, password }) => {
         test(`TC-006: Should logged in fails with a error message when using locked credentials :"${username}"`, async ({ loginPage }) => {
@@ -65,7 +65,7 @@ test.describe('LOGIN PAGE', () => {
             expect(await loginPage.getErrorMessage()).toContain("user has been locked out");
             expect(loginPage.isValidURL()).toBe(true);
         });
-    })
+    });
 });
 
 test.describe('PRODUCT PAGE', () => {
@@ -316,7 +316,7 @@ test.describe('CHECKOUT COMPLETE PAGE', () => {
         await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
         await cartPage.gotoCheckout();
-        await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode);
+        await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
         await checkoutInformationPage.goToCheckoutOverviewPage();
         await checkoutOverviewPage.goToCheckoutCompletePage();
     });

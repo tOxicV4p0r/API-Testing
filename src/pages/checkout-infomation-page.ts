@@ -38,25 +38,31 @@ export class CheckoutInformationPage {
         await expect(this.page.getByText(this.locatorTitle)).toBeVisible({ timeout: 5000 });
     }
 
-    async fillFirstName(text: string): Promise<void> {
+    async fillFirstName(text: string, required: boolean = true): Promise<void> {
         await this.page.fill(this.inputFirstName, text);
-        expect.soft(await this.page.locator(this.inputFirstName).inputValue(), `Fistname not equal to ${text}`).toBe(text);
+        if (required) {
+            expect.soft(await this.page.locator(this.inputFirstName).inputValue(), `Fistname not equal to ${text}`).toBe(text);
+        }
     }
 
-    async fillLastName(text: string): Promise<void> {
+    async fillLastName(text: string, required: boolean = true): Promise<void> {
         await this.page.fill(this.inputLastName, text);
-        expect.soft(await this.page.locator(this.inputLastName).inputValue(), `Lastname not equal to ${text}`).toBe(text);
+        if (required) {
+            expect.soft(await this.page.locator(this.inputLastName).inputValue(), `Lastname not equal to ${text}`).toBe(text);
+        }
     }
 
-    async fillPostCode(text: string): Promise<void> {
+    async fillPostCode(text: string, required: boolean = true): Promise<void> {
         await this.page.fill(this.inputPostCode, text);
-        expect.soft(await this.page.locator(this.inputPostCode).inputValue(), `Postcode not equal to ${text}`).toBe(text);
+        if (required) {
+            expect.soft(await this.page.locator(this.inputPostCode).inputValue(), `Postcode not equal to ${text}`).toBe(text);
+        }
     }
 
-    async fillInfomation(firstName: string, lastName: string, postCode: string): Promise<void> {
-        await this.fillFirstName(firstName);
-        await this.fillLastName(lastName);
-        await this.fillPostCode(postCode);
+    async fillInfomation(firstName: string, lastName: string, postCode: string, required: boolean = true): Promise<void> {
+        await this.fillFirstName(firstName, required);
+        await this.fillLastName(lastName, required);
+        await this.fillPostCode(postCode, required);
     }
 
     async isFoundErrorMessage(): Promise<boolean> {
