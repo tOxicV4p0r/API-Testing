@@ -322,9 +322,9 @@ test.describe('CHECKOUT COMPLETE PAGE', () => {
         await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
         await cartPage.gotoCheckout();
-        // await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
-        // await checkoutInformationPage.goToCheckoutOverviewPage();
-        // await checkoutOverviewPage.goToCheckoutCompletePage();
+        await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
+        await checkoutInformationPage.goToCheckoutOverviewPage();
+        await checkoutOverviewPage.goToCheckoutCompletePage();
         await checkoutCompletePage.goto();
     });
 
