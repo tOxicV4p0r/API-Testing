@@ -298,6 +298,9 @@ export class InventoryPage {
             const element = this.getElement(i);
 
             await this.addToCart(element);
+            if (!await this.isItemAdded(element)) {
+                continue;
+            }
 
             const name = await this.getName(element);
             const price = await this.getPrice(element);

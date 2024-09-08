@@ -213,32 +213,37 @@ test.describe('CHECKOUT INFORMATION PAGE', () => {
     });
 
     test('TC-025: When clicking "Continue" with some client information, display an error message', async ({ checkoutInformationPage }) => {
+        await checkoutInformationPage.goto();
         await checkoutInformationPage.fillFirstName(userInfo.firstName)
         await checkoutInformationPage.gotoContinue();
-        expect(await checkoutInformationPage.isFoundErrorMessage()).toBe(true);
+        expect.soft(await checkoutInformationPage.isFoundErrorMessage(), 'Should show error message').toBe(true);
 
+        await checkoutInformationPage.goto();
         await checkoutInformationPage.fillFirstName("")
         await checkoutInformationPage.fillLastName(userInfo.lastName);
         await checkoutInformationPage.gotoContinue();
-        expect(await checkoutInformationPage.isFoundErrorMessage()).toBe(true);
+        expect.soft(await checkoutInformationPage.isFoundErrorMessage(), 'Should show error message').toBe(true);
 
+        await checkoutInformationPage.goto();
         await checkoutInformationPage.fillFirstName("")
         await checkoutInformationPage.fillLastName("");
         await checkoutInformationPage.fillPostCode(userInfo.postCode);
         await checkoutInformationPage.gotoContinue();
-        expect(await checkoutInformationPage.isFoundErrorMessage()).toBe(true);
+        expect.soft(await checkoutInformationPage.isFoundErrorMessage(), 'Should show error message').toBe(true);
 
+        await checkoutInformationPage.goto();
         await checkoutInformationPage.fillFirstName(userInfo.firstName)
         await checkoutInformationPage.fillLastName("");
         await checkoutInformationPage.fillPostCode(userInfo.postCode);
         await checkoutInformationPage.gotoContinue();
-        expect(await checkoutInformationPage.isFoundErrorMessage()).toBe(true);
+        expect.soft(await checkoutInformationPage.isFoundErrorMessage(), 'Should show error message').toBe(true);
 
+        await checkoutInformationPage.goto();
         await checkoutInformationPage.fillFirstName(userInfo.firstName)
         await checkoutInformationPage.fillLastName(userInfo.lastName);
         await checkoutInformationPage.fillPostCode("");
         await checkoutInformationPage.gotoContinue();
-        expect(await checkoutInformationPage.isFoundErrorMessage()).toBe(true);
+        expect.soft(await checkoutInformationPage.isFoundErrorMessage(), 'Should show error message').toBe(true);
     });
 
     test('TC-026: When clicking "Continue" with all client information, proceed to the checkout overview page', async ({ checkoutInformationPage, checkoutOverviewPage }) => {
@@ -265,7 +270,7 @@ test.describe('CHECKOUT OVERVIEW PAGE', () => {
         cartItems = await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
         await cartPage.gotoCheckout();
-        await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode);
+        await checkoutInformationPage.fillInfomation(userInfo.firstName, userInfo.lastName, userInfo.postCode, false);
         await checkoutInformationPage.goToCheckoutOverviewPage();
     });
 
