@@ -10,6 +10,9 @@ test.describe('Buy item', () => {
     test.describe.configure({ mode: "serial" });
     let cartItems = [];
 
+    const username = users[3].username;
+    const password = users[3].password;
+
     test('Buy item from search', async ({
         page,
         loginPage,
@@ -25,9 +28,9 @@ test.describe('Buy item', () => {
             await loginPage.goto();
             expect.soft(await loginPage.isValidPage()).toBe(true);
 
-            await loginPage.login(users[3].username, users[3].password);
+            await loginPage.login(username, password);
 
-            expect.soft(await loginPage.isValidURL()).toBe(false);
+            expect.soft(loginPage.isValidURL()).toBe(false);
         });
 
         // Product page
@@ -47,7 +50,7 @@ test.describe('Buy item', () => {
 
         await test.step('Proceed to the next page', async () => {
             await inventoryPage.goToCartPage();
-            expect.soft(await inventoryPage.isValidURL()).toBe(false);
+            expect.soft(inventoryPage.isValidURL()).toBe(false);
         })
 
         // Cart page
@@ -73,7 +76,7 @@ test.describe('Buy item', () => {
 
         await test.step('Proceed to the next page', async () => {
             await cartPage.gotoCheckout();
-            expect(await cartPage.isValidURL()).toBe(false);
+            expect(cartPage.isValidURL()).toBe(false);
         });
 
         // Checkout information page
@@ -88,7 +91,7 @@ test.describe('Buy item', () => {
 
         await test.step('Proceed to the next page', async () => {
             await checkoutInformationPage.goToCheckoutOverviewPage();
-            expect.soft(await checkoutInformationPage.isValidURL()).toBe(false);
+            expect.soft(checkoutInformationPage.isValidURL()).toBe(false);
         });
 
         // Checkout overview page
@@ -110,7 +113,7 @@ test.describe('Buy item', () => {
 
         await test.step('Proceed to the next page', async () => {
             await checkoutOverviewPage.goToCheckoutCompletePage();
-            expect.soft(await checkoutOverviewPage.isValidURL()).toBe(false);
+            expect.soft(checkoutOverviewPage.isValidURL()).toBe(false);
         });
 
         // Checkout complete page

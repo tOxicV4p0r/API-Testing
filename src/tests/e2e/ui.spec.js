@@ -1,12 +1,13 @@
 const { expect } = require("@playwright/test");
 const { test } = require("../../pages/base");
-const { validUsers, lockedUsers } = require("../../test-data/e2e/users");
+const { validUsers, lockedUsers, problemUsers } = require("../../test-data/e2e/users");
 const { LoginPage } = require("../../pages/login-page");
 
 const userInfo = require('../../test-data/e2e/user-information.json');
 
-const validUsername = validUsers[0].username;
-const validPassword = validUsers[0].password
+const VALID_USERNAME = problemUsers[0].username;
+const VALID_PASSWORD = problemUsers[0].password
+const TAX = 0.08;
 
 test.describe('LOGIN PAGE', () => {
     /*
@@ -23,18 +24,18 @@ test.describe('LOGIN PAGE', () => {
     })
 
     test('TC-001: Input fields display as the data that was filled', async ({ loginPage }) => {
-        await loginPage.fillUsername(validUsername);
-        await loginPage.fillPassword(validPassword);
+        await loginPage.fillUsername(VALID_USERNAME);
+        await loginPage.fillPassword(VALID_PASSWORD);
     });
 
     test('TC-002: Show an error message if attempting to log in without a username', async ({ loginPage }) => {
-        await loginPage.fillPassword(validPassword);
+        await loginPage.fillPassword(VALID_PASSWORD);
         await loginPage.clickLogin();
         expect(await loginPage.getErrorMessage()).toContain('Username is required');
     });
 
     test('TC-003: Show an error message if attempting to log in without a password', async ({ loginPage }) => {
-        await loginPage.fillUsername(validUsername);
+        await loginPage.fillUsername(VALID_USERNAME);
         await loginPage.clickLogin();
         expect(await loginPage.getErrorMessage()).toContain('Password is required');
     });
@@ -83,7 +84,7 @@ test.describe('PRODUCT PAGE', () => {
     */
 
     test.beforeEach(async ({ page, inventoryPage }) => {
-        await setupValidLogin(page, validUsername, validPassword);
+        await setupValidLogin(page, VALID_USERNAME, VALID_PASSWORD);
         await inventoryPage.goto();
     });
 
@@ -150,7 +151,7 @@ test.describe('CART PAGE', () => {
     let cartItems = [];
 
     test.beforeEach(async ({ page, inventoryPage }) => {
-        await setupValidLogin(page, validUsername, validPassword);
+        await setupValidLogin(page, VALID_USERNAME, VALID_PASSWORD);
         await inventoryPage.goto();
         cartItems = await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
@@ -193,7 +194,7 @@ test.describe('CHECKOUT INFORMATION PAGE', () => {
     */
 
     test.beforeEach(async ({ page, inventoryPage, cartPage }) => {
-        await setupValidLogin(page, validUsername, validPassword);
+        await setupValidLogin(page, VALID_USERNAME, VALID_PASSWORD);
         await inventoryPage.goto();
         await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
@@ -259,7 +260,7 @@ test.describe('CHECKOUT OVERVIEW PAGE', () => {
     let cartItems = [];
 
     test.beforeEach(async ({ page, inventoryPage, cartPage, checkoutInformationPage }) => {
-        await setupValidLogin(page, validUsername, validPassword);
+        await setupValidLogin(page, VALID_USERNAME, VALID_PASSWORD);
         await inventoryPage.goto();
         cartItems = await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();
@@ -280,9 +281,14 @@ test.describe('CHECKOUT OVERVIEW PAGE', () => {
 
     test('TC-029: Correctly calculate the total, tax, and grand total', async ({ checkoutOverviewPage }) => {
         const totalPrice = sumPrice(cartItems);
-        expect.soft(await checkoutOverviewPage.isCorrectedTotalPrice(totalPrice), 'Incorrect the total price').toBe(true);;
-        expect.soft(await checkoutOverviewPage.isCorrectedGrandTotalPrice(totalPrice), 'Incorrect the grand total').toBe(true);
-        expect.soft(await checkoutOverviewPage.isCorrectedTax(totalPrice), 'Incorrect the tax').toBe(true);
+
+        expect.soft(await checkoutOverviewPage.getTotalPrice()).toBe(totalPrice);
+
+        const totalPriceWTax = totalPrice + Number((totalPrice * TAX).toFixed(2));
+        expect.soft(await checkoutOverviewPage.getGrandTotalPrice()).toBe(totalPriceWTax);
+
+        const totalTax = Number((totalPrice * TAX).toFixed(2))
+        expect.soft(await checkoutOverviewPage.getTax()).toBe(totalTax);
     });
 
     test('TC-030: When clicking "Cancel", navigate back to the product page', async ({ checkoutOverviewPage, inventoryPage }) => {
@@ -305,7 +311,7 @@ test.describe('CHECKOUT COMPLETE PAGE', () => {
     */
 
     test.beforeEach(async ({ page, inventoryPage, cartPage, checkoutInformationPage, checkoutOverviewPage }) => {
-        await setupValidLogin(page, validUsername, validPassword);
+        await setupValidLogin(page, VALID_USERNAME, VALID_PASSWORD);
         await inventoryPage.goto();
         await inventoryPage.selectItem(2);
         await inventoryPage.goToCartPage();

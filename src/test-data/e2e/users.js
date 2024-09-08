@@ -7,6 +7,10 @@ const validUsers = [
         "username": "performance_glitch_user",
         "password": "secret_sauce"
     },
+    {
+        "username": "visual_user",
+        "password": "secret_sauce"
+    }
 ];
 
 const lockedUsers = [
@@ -23,10 +27,6 @@ const problemUsers = [
     },
     {
         "username": "error_user",
-        "password": "secret_sauce"
-    },
-    {
-        "username": "visual_user",
         "password": "secret_sauce"
     }
 ];

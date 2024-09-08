@@ -116,17 +116,22 @@ export class CheckoutOverviewPage {
                 name = await this.getItemName(element);
 
                 if (name.toLocaleLowerCase() === items[i].name.toLocaleLowerCase()) {
+                    found = true;
+
                     if (price === items[i].price) {
-                        found = true;
                         break;
                     }
+
+                    expect.soft(price, `Incorrect price :${items[i].name} ,price:${items[i].price}`).toBe(items[i].price);
+                    break;
                 }
             }
 
             if (!found) {
-                expect.soft(false, `Incorrected item :${name}`).toBe(true);
+                expect.soft(false, `Not found item :${items[i].name} price:${items[i].price}`).toBe(true);
                 isCorrected = false;
             }
+
         }
 
         return isCorrected;

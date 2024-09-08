@@ -214,6 +214,7 @@ export class InventoryPage {
     async canAddAndRemoveAll(): Promise<boolean> {
         const count = await this.countItem();
         let cartItemCount = await this.getCartCount();
+        let isError = false;
         for (let i = 0; i < count; i++) {
             const element = this.page.locator(this.locatorItem).nth(i);
 
@@ -222,13 +223,13 @@ export class InventoryPage {
             const cartItemCountAdded = await this.getCartCount();
             if (cartItemCount !== cartItemCountAdded) {
                 expect.soft(cartItemCountAdded, `Count badge should change from ${cartItemCount - 1} to ${cartItemCount}`).toBe(cartItemCount);
-                return false;
+                isError = true;
             }
 
             const isAdded = await this.isItemAdded(element);
             if (!isAdded) {
                 expect.soft(isAdded, `Button should change to 'Remove'`).toBe(true);
-                return false;
+                isError = true;
             }
         }
 
@@ -240,17 +241,17 @@ export class InventoryPage {
             const cartItemCountRemoved = await this.getCartCount();
             if (cartItemCount !== cartItemCountRemoved) {
                 expect.soft(cartItemCountRemoved, `Count badge should change from ${cartItemCount + 1} to ${cartItemCount}`).toBe(cartItemCount);
-                return false;
+                isError = true;
             }
 
             const isRemoved = await this.isItemRemoved(element);
             if (!isRemoved) {
                 expect.soft(isRemoved, `Button should change to 'Add to cart'`).toBe(true);
-                return false;
+                isError = true;
             }
         }
 
-        return true;
+        return isError ? false : true;
     }
 
     async selectItems(items: string[]): Promise<any[]> {
